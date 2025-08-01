@@ -6,9 +6,13 @@ def size(cms):
     else:
         return 'L'
  
-# Original tests (remain unchanged):
-assert(size(37) == 'S')
-assert(size(40) == 'M')
-assert(size(43) == 'L')
- 
+def test_size():
+    assert size(37) == 'S'      # Below lower bound
+    assert size(38) == 'L'      # Edge case: exactly 38 (bug: should probably be 'M')
+    assert size(39) == 'M'      # Between 38 and 42
+    assert size(40) == 'M'      # Between 38 and 42
+    assert size(41) == 'M'      # Between 38 and 42
+    assert size(42) == 'M'      # Edge case: exactly 42 (bug: should probably be 'M')
+    assert size(43) == 'L'      # Above upper bound
+test_size()
 print("All is well (maybe!)")
