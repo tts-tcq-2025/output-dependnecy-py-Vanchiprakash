@@ -1,29 +1,48 @@
-major_colors = ["White", "Red", "Black", "Yellow", "Violet"]
-minor_colors = ["Blue", "Orange", "Green", "Brown", "Slate"]
+def generate_color_map():
+    major_colors = ["White", "Red", "Black", "Yellow", "Violet"]
+    minor_colors = ["Blue", "Orange", "Green", "Brown", "Slate"]
+    color_map = []
 
-# New function: Generates the *strings* for the color map, but still contains the original bug
-def get_color_map_strings():
-    map_strings = []
     for i, major in enumerate(major_colors):
         for j, minor in enumerate(minor_colors):
-            pair_number = i * 5 + j 
-            # This is the line from the original code that causes the misalignment
-            map_strings.append(f'{pair_number} | {major} | {minor}')
-    return map_strings
+            pair_number = i * len(minor_colors) + j
+            color_map.append((pair_number, major, minor))
 
-def print_color_map():
-    # This function now uses the new 'get_color_map_strings' and only prints
-    strings_to_print = get_color_map_strings()
-    for s in strings_to_print:
-        print(s)
-    return len(strings_to_print) # Returns count of lines printed
+    return color_map
 
+def format_color_map_entry(pair_number, major, minor):
+    return f"{pair_number} | {major:<6} | {minor}"
 
-result = print_color_map()
-assert(result == 25)
-actual_map_strings = get_color_map_strings()
-assert(actual_map_strings[9] == "10 | Red | Slate") # This will fail if get_color_map_strings()[9] is "10 | Red | Slate"
+def printOnconsole(lineItem):
+    print(lineItem)
 
-print("All is well (maybe!)")
+def print_color_map(output_func=printOnConsole):
+    color_map = generate_color_map()
+    for pair_number, major, minor in color_map:
+        line = format_color_map_entry(pair_number, major, minor)
+        output_func(line)  # Abstracted output
+    return len(color_map)
+
+#assert(result == 25)
+def test_print_color_map_fail():
+
+    # Record interaction   using Mock (Fake Dependency)
+    def make_print_mock():
+    #record
+        calls = []
+
+    def printmock(line):
+        calls.append(line)
+
+        printmock.calls = calls  # Attach calls list to function object
+    return printmock
+
+    mock_print = make_print_mock()
+    count = print_color_map(mock_print)
+
+    # assertions
+    assert len(mock_print.calls) == 25  #value based testing
+    assert mock_print.calls[0] == "0 | White  | Blue"  #interaction or Behavior Testing
+    assert mock_print.calls[-1] == "24 | Violet | Slate"
 
 
