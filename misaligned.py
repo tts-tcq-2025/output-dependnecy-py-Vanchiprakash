@@ -123,5 +123,3 @@ def test_print_color_map_fail():
     assert mock_print.calls[0] == "0 | White  | Blue"  #interaction or Behavior Testing
 
     assert mock_print.calls[-1] == "24 | Violet | Slate"
-
- 
